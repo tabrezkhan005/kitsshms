@@ -9,8 +9,6 @@ interface DatePickerProps {
   onChange: (date: string) => void;
   minDate?: string;
   placeholder?: string;
-  label?: string;
-  required?: boolean;
   id?: string;
 }
 
@@ -26,8 +24,6 @@ export function DatePicker({
   onChange,
   minDate,
   placeholder = "Select a date",
-  label,
-  required = false,
   id
 }: DatePickerProps) {
   const [isOpen, setIsOpen] = useState(false);
@@ -55,7 +51,7 @@ export function DatePicker({
     if (selectedDate) {
       setCurrentMonth(new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1));
     }
-  }, [value]);
+  }, [value, selectedDate]);
 
   // Generate calendar days
   const generateCalendarDays = () => {

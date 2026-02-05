@@ -40,7 +40,7 @@ export async function GET(request: NextRequest) {
       }
 
       // Fetch user's booking history
-      const { data: bookings, error: bookingsError } = await supabaseAdmin
+      const { data: bookings } = await supabaseAdmin
         .from('booking_requests')
         .select(`
           *,

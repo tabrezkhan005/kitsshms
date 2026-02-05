@@ -11,8 +11,8 @@ export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
     const hallId = searchParams.get('hall_id')
-    const startDate = searchParams.get('start_date')
-    const endDate = searchParams.get('end_date')
+    const _startDate = searchParams.get('start_date')
+    const _endDate = searchParams.get('end_date')
 
     // If specific hall requested
     if (hallId) {
@@ -31,7 +31,7 @@ export async function GET(request: NextRequest) {
       }
 
       // Fetch hall booking history
-      let bookingsQuery = supabaseAdmin
+      const bookingsQuery = supabaseAdmin
         .from('booking_request_halls')
         .select(`
           booking_request_id,
@@ -52,28 +52,50 @@ export async function GET(request: NextRequest) {
         .eq('hall_id', hallId)
         .order('created_at', { foreignTable: 'booking_requests', ascending: false })
 
-      const { data: bookingHalls, error: bookingsError } = await bookingsQuery
+      const { data: bookingHalls } = await bookingsQuery
+
+      // Define interface for strong typing
+      interface Booking {
+        id: string;
+        event_name: string;
+        start_date: string;
+        end_date: string;
+        start_time: string;
+        end_time: string;
+        status: string;
+        expected_attendees: number;
+        reason_for_booking: string;
+        created_at: string;
+        users?: {
+          id: string;
+          username: string;
+          email: string;
+          role: string;
+          club_name?: string;
+        } | null;
+      }
 
       // Extract and flatten bookings
-      const bookings = bookingHalls
+      const bookings = (bookingHalls
         ?.map(bh => bh.booking_requests)
-        .filter(b => b !== null)
-        .sort((a: any, b: any) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()) || []
+        .filter(b => b !== null) || []) as unknown as Booking[];
+
+      bookings.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
 
       // Calculate hall statistics
       const stats = {
         totalBookings: bookings.length,
-        approved: bookings.filter((b: any) => b.status === 'approved').length,
-        pending: bookings.filter((b: any) => b.status === 'pending').length,
-        rejected: bookings.filter((b: any) => b.status === 'rejected').length,
+        approved: bookings.filter((b) => b.status === 'approved').length,
+        pending: bookings.filter((b) => b.status === 'pending').length,
+        rejected: bookings.filter((b) => b.status === 'rejected').length,
         totalAttendees: bookings
-          .filter((b: any) => b.status === 'approved')
-          .reduce((sum: number, b: any) => sum + (b.expected_attendees || 0), 0),
-        upcomingEvents: bookings.filter((b: any) =>
+          .filter((b) => b.status === 'approved')
+          .reduce((sum, b) => sum + (b.expected_attendees || 0), 0),
+        upcomingEvents: bookings.filter((b) =>
           b.status === 'approved' && new Date(b.start_date) >= new Date()
         ).length,
-        facultyBookings: bookings.filter((b: any) => b.users?.role === 'faculty').length,
-        clubBookings: bookings.filter((b: any) => b.users?.role === 'clubs').length
+        facultyBookings: bookings.filter((b) => b.users?.role === 'faculty').length,
+        clubBookings: bookings.filter((b) => b.users?.role === 'clubs').length
       }
 
       // Monthly usage (last 6 months)
@@ -85,7 +107,7 @@ export async function GET(request: NextRequest) {
         monthlyUsage[key] = 0
       }
 
-      bookings.forEach((b: any) => {
+      bookings.forEach((b) => {
         if (b.status === 'approved') {
           const d = new Date(b.start_date)
           const key = d.toLocaleString('default', { month: 'short', year: '2-digit' })
@@ -129,14 +151,14 @@ export async function GET(request: NextRequest) {
           `)
           .eq('hall_id', hall.id)
 
-        const bookings = bookingHalls?.map(bh => bh.booking_requests).filter(b => b) || []
+        const bookings = (bookingHalls?.map(bh => bh.booking_requests).filter(b => b) || []) as unknown as { status: string }[];
 
         return {
           ...hall,
           stats: {
             totalBookings: bookings.length,
-            approved: bookings.filter((b: any) => b.status === 'approved').length,
-            pending: bookings.filter((b: any) => b.status === 'pending').length
+            approved: bookings.filter((b) => b.status === 'approved').length,
+            pending: bookings.filter((b) => b.status === 'pending').length
           }
         }
       })

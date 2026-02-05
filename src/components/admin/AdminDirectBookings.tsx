@@ -223,7 +223,7 @@ export default function AdminDirectBookings() {
                   key={link.href}
                   link={{
                     ...link,
-                    icon: React.cloneElement(link.icon as React.ReactElement, {
+                    icon: React.cloneElement(link.icon as React.ReactElement<{ className?: string }>, {
                       className: `w-5 h-5 ${pathname === link.href ? 'text-gray-900' : 'text-gray-500'}`
                     })
                   }}
@@ -408,7 +408,6 @@ export default function AdminDirectBookings() {
                             onChange={(date) => handleDateChange("start_date", date)}
                             placeholder="Select start date"
                             minDate={new Date().toISOString().split('T')[0]}
-                            required
                           />
                         </div>
 
@@ -422,7 +421,6 @@ export default function AdminDirectBookings() {
                             onChange={(date) => handleDateChange("end_date", date)}
                             placeholder="Select end date"
                             minDate={formData.start_date || new Date().toISOString().split('T')[0]}
-                            required
                           />
                         </div>
 

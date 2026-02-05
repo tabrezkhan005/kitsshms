@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
-import { Calendar, ChevronLeft, ChevronRight, CheckCircle, Clock, XCircle, Users } from "lucide-react";
+import { Calendar, ChevronLeft, ChevronRight, CheckCircle, Clock, XCircle } from "lucide-react";
 
 // Types for hall availability data
 interface HallAvailability {
@@ -51,7 +51,7 @@ export default function HallCalendar({ className = "", compact = false }: HallCa
     const month = date.getMonth();
 
     const firstDay = new Date(year, month, 1);
-    const lastDay = new Date(year, month + 1, 0);
+    const _lastDay = new Date(year, month + 1, 0);
     const startDate = new Date(firstDay);
     startDate.setDate(startDate.getDate() - firstDay.getDay());
 
@@ -133,7 +133,7 @@ export default function HallCalendar({ className = "", compact = false }: HallCa
         const response = await fetch(`/api/halls/availability?start_date=${startDate.toISOString().split('T')[0]}&end_date=${endDate.toISOString().split('T')[0]}`);
 
         if (response.ok) {
-          const data = await response.json();
+          const _data = await response.json();
           // Process the data to create a simple overview
           const overview: Record<string, string> = {};
           // This would be populated with actual data
@@ -175,6 +175,7 @@ export default function HallCalendar({ className = "", compact = false }: HallCa
     if (compact) {
       fetchMonthOverview(currentDate).then(setMonthAvailability);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentDate, compact]);
 
   const calendarDays = generateCalendarDays(currentDate);

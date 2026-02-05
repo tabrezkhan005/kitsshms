@@ -220,7 +220,7 @@ export default function AdminDashboard() {
                   key={link.href}
                   link={{
                     ...link,
-                    icon: React.cloneElement(link.icon as React.ReactElement, {
+                    icon: React.cloneElement(link.icon as React.ReactElement<{ className?: string }>, {
                       className: `w-5 h-5 ${pathname === link.href ? 'text-gray-900' : 'text-gray-500'}`
                     })
                   }}
@@ -327,7 +327,7 @@ export default function AdminDashboard() {
             {/* Today's Events (2 cols) */}
             <motion.div variants={itemVariants} className="lg:col-span-2 space-y-4">
               <div className="flex items-center justify-between">
-                <h2 className="text-lg font-bold text-gray-900">Today's Events</h2>
+                <h2 className="text-lg font-bold text-gray-900">Today&apos;s Events</h2>
                 <Button variant="link" onClick={() => router.push('/admin/calendar')} className="text-gray-500 hover:text-gray-900">
                   View Calendar <ArrowRight className="w-4 h-4 ml-1" />
                 </Button>

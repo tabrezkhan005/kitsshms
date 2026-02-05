@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import { useRouter, usePathname } from "next/navigation";
 import {
@@ -8,10 +8,10 @@ import {
   SidebarBody,
   SidebarLink,
 } from "@/components/ui/sidebar";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import {
   Calendar as CalendarIcon,
   Users,
@@ -23,12 +23,10 @@ import {
   LogOut,
   ChevronLeft,
   ChevronRight,
-  XCircle,
-  Briefcase,
   Building2
 } from "lucide-react";
 import { logoutUser } from "@/lib/auth";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 
 // Navigation links
 const sidebarLinks = [
@@ -203,7 +201,7 @@ export default function AdminCalendar() {
                   key={link.href}
                   link={{
                     ...link,
-                    icon: React.cloneElement(link.icon as React.ReactElement, {
+                    icon: React.cloneElement(link.icon as React.ReactElement<{ className?: string }>, {
                       className: `w-5 h-5 ${pathname === link.href ? 'text-gray-900' : 'text-gray-500'}`
                     })
                   }}

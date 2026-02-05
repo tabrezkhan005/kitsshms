@@ -10,7 +10,6 @@ const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey);
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
-    const period = searchParams.get('period') || 'today';
 
     // Get today's date in YYYY-MM-DD
     const today = new Date().toISOString().split('T')[0];

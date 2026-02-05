@@ -324,7 +324,7 @@ export default function AdminRequests() {
                   key={link.href}
                   link={{
                     ...link,
-                    icon: React.cloneElement(link.icon as React.ReactElement, {
+                    icon: React.cloneElement(link.icon as React.ReactElement<{ className?: string }>, {
                       className: `w-5 h-5 ${pathname === link.href ? 'text-gray-900' : 'text-gray-500'}`
                     })
                   }}

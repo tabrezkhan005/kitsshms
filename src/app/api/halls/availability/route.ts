@@ -74,7 +74,7 @@ export async function GET(request: NextRequest) {
 
         // Check requests
         const requestBooking = requests?.find(r =>
-          r.booking_request_halls.some((h: any) => h.hall_id === hall.id)
+          r.booking_request_halls.some((h: { hall_id: string }) => h.hall_id === hall.id)
         );
 
         if (requestBooking) {

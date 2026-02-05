@@ -198,7 +198,6 @@ export default function NewBookingPage() {
                             onChange={(date) => handleInputChange("startDate", date)}
                             minDate={getTodayDate()}
                             placeholder="Select start date"
-                            required
                           />
                         </div>
 
@@ -212,7 +211,6 @@ export default function NewBookingPage() {
                             onChange={(date) => handleInputChange("endDate", date)}
                             minDate={formData.startDate || getTodayDate()}
                             placeholder="Select end date"
-                            required
                           />
                         </div>
 
