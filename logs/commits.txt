@@ -1,0 +1,7 @@
+# KITS Seminar Hall Management System - Commit Logs
+
+## Commit History
+
+### No commits yet
+- Waiting for user to request commits as per rules
+- Will log commit hashes and descriptions here when commits are made
